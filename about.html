@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ぱんね - 黏糕黏黏糕</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo">芍芍芍芍芍药</div>
+        <ul class="nav-links">
+            <li><a href="index.html">首页</a></li>
+            <li><a href="about.html" class="active">黏糕黏黏糕</a></li>
+            <li><a href="products.html">面包猫猫</a></li>
+            <li><a href="contact.html">小猫鱼</a></li>
+        </ul>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="container">
+        <div class="cute-section">
+            <h2>✨ 黏糕黏黏糕 ✨</h2>
+            <div class="emoji">*･゜ﾟ･*:.｡..｡.:*･'(*ﾟ▽ﾟ*)'･*:.｡. .｡.:*･゜ﾟ･*</div>
+        </div>
+
+        <!-- 对话框 -->
+        <div class="feature-card">
+            <h3>💬 对话框</h3>
+            <div class="dialogue-box">
+                <div class="message received">꒰ᐢ⸝⸝•༝•⸝⸝ᐢ꒱ 你好呀！</div>
+                <div class="message sent">૮⸝⸝ᴗ͈ ‸ ᴗ͈⸝⸝ა 今天天气真好～</div>
+                <input type="text" id="message-input" placeholder="输入消息...">
+                <button id="send-btn">发送</button>
+            </div>
+        </div>
+
+        <!-- 留言板 -->
+        <div class="feature-card">
+            <h3>📝 留言板</h3>
+            <div id="message-board"></div>
+            <input type="text" id="board-input" placeholder="写下你的留言...">
+            <button id="board-btn">发布</button>
+        </div>
+
+        <!-- 每日待办 -->
+        <div class="feature-card">
+            <h3>📅 每日待办</h3>
+            <ul id="todo-list"></ul>
+            <input type="text" id="todo-input" placeholder="添加待办事项...">
+            <button id="todo-btn">添加</button>
+        </div>
+
+        <!-- 心情打卡 -->
+        <div class="feature-card">
+            <h3>😊 心情打卡</h3>
+            <div class="mood-options">
+                <button class="mood-btn" data-mood="开心">(ᐡ ɞ̴̶̷ . ɞ̴̶̷ ᐡ)</button>
+                <button class="mood-btn" data-mood="难过">˻ᵒ♡ͮᵉ⸝⸝</button>
+                <button class="mood-btn" data-mood="兴奋">૮꒰ ˶• ༝ •˶꒱ა</button>
+                <button class="mood-btn" data-mood="平静">꒰๑´•௰•`๑꒱</button>
+            </div>
+            <div id="mood-history"></div>
+        </div>
+
+        <!-- 简易跑团骰子 -->
+        <div class="feature-card">
+            <h3>🎲 简易跑团骰子</h3>
+            <div id="dice-result">点击骰子开始投掷</div>
+            <button id="dice-btn">🎲 投掷</button>
+        </div>
+
+        <!-- 32*32像素画板 -->
+        <div class="feature-card">
+            <h3>🎨 像素画板</h3>
+            <canvas id="pixel-canvas" width="256" height="256"></canvas>
+            <div class="color-picker">
+                <input type="color" id="color-input" value="#000000">
+                <button id="clear-btn">清空</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>&copy; 2025 ぱんね 泡泡泡泡泡芙</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/new-features.js"></script>
+</body>
+</html>
