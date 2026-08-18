@@ -8,6 +8,12 @@ on:
     paths:
       - 'mnemonic-bridge-v0.4/**'
       - '.github/workflows/mnemonic-bridge-build.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'mnemonic-bridge-v0.4/**'
+      - '.github/workflows/mnemonic-bridge-build.yml'
 
 jobs:
   build:
