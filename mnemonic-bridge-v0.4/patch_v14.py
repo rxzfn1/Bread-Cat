@@ -11,12 +11,13 @@ s = svc.read_text()
 
 # 1) Word recognition: treat common centered separators as part of one displayed word,
 # then remove only those separators before sending the word to MaiMemo.
+# Hyphen is placed last in the Java regex character class so no Java string escape is needed.
 s = s.replace(
     'private static final Pattern WORD = Pattern.compile("^[A-Za-z][A-Za-z\'’-]{1,34}$");',
-    'private static final Pattern WORD = Pattern.compile("^[A-Za-z][A-Za-z\'’\\-·•∙⋅・‧･]{1,40}$");')
+    'private static final Pattern WORD = Pattern.compile("^[A-Za-z][A-Za-z\'’·•∙⋅・‧･-]{1,40}$");')
 s = s.replace(
     'private static final Pattern TOKEN = Pattern.compile("(?<![A-Za-z])[A-Za-z][A-Za-z\'’-]{1,34}(?![A-Za-z])");',
-    'private static final Pattern TOKEN = Pattern.compile("(?<![A-Za-z])[A-Za-z][A-Za-z\'’\\-·•∙⋅・‧･]{1,40}(?![A-Za-z])");')
+    'private static final Pattern TOKEN = Pattern.compile("(?<![A-Za-z])[A-Za-z][A-Za-z\'’·•∙⋅・‧･-]{1,40}(?![A-Za-z])");')
 s = s.replace(
     "return word.replace('’', '\\'').trim();",
     "return word.replace('’', '\\'').replaceAll(\"[·•∙⋅・‧･]\", \"\").trim();")
