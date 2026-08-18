@@ -1,0 +1,45 @@
+name: Build memory 2.2 APK
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Generate memory project
+        run: |
+          python3 memory-v2/generate_project.py
+          printf 'android.useAndroidX=true\n' > memory-v2/gradle.properties
+      - name: Apply memory 2.2 no-API search patch
+        run: python3 memory-v2/patch_v22.py
+      - name: Reuse confirmed transparent floating icon
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re, base64
+          src = Path('mnemonic-bridge-v0.4/app/src/main/java/com/bbdc/memo/bridge/BridgeAccessibilityService.java').read_text()
+          m = re.search(r'OVERLAY_ICON_BASE64\s*=\s*"([^"]+)"', src)
+          if not m:
+              raise SystemExit('overlay icon base64 not found')
+          out = Path('memory-v2/app/src/main/res/drawable/ic_overlay_bridge.png')
+          out.write_bytes(base64.b64decode(m.group(1)))
+          print(out, out.stat().st_size)
+          PY
+      - name: Build APK
+        working-directory: memory-v2
+        run: gradle :app:assembleDebug --stacktrace
+      - name: Rename APK
+        run: cp memory-v2/app/build/outputs/apk/debug/app-debug.apk memory-v2.2-no-api-search.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: memory-v2.2-no-api-search
+          path: memory-v2.2-no-api-search.apk
+          if-no-files-found: error
