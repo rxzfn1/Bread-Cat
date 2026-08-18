@@ -1,0 +1,42 @@
+name: Build Mnemonic Bridge APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - build/mnemonic-bridge-v0.4
+    paths:
+      - 'mnemonic-bridge-v0.4/**'
+      - '.github/workflows/mnemonic-bridge-build.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle 8.9
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Build debug APK
+        working-directory: mnemonic-bridge-v0.4
+        run: gradle :app:assembleDebug --stacktrace
+
+      - name: Rename APK
+        run: cp mnemonic-bridge-v0.4/app/build/outputs/apk/debug/app-debug.apk mnemonic-bridge-v0.4.apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: mnemonic-bridge-v0.4
+          path: mnemonic-bridge-v0.4.apk
+          if-no-files-found: error
