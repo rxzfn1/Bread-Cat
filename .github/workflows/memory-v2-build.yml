@@ -17,7 +17,18 @@ jobs:
       - name: Generate memory 2.0 project
         run: python3 memory-v2/generate_project.py
       - name: Reuse confirmed transparent floating icon
-        run: cp mnemonic-bridge-v0.4/app/src/main/res/drawable/ic_overlay_bridge.png memory-v2/app/src/main/res/drawable/ic_overlay_bridge.png
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re, base64
+          src = Path('mnemonic-bridge-v0.4/app/src/main/java/com/bbdc/memo/bridge/BridgeAccessibilityService.java').read_text()
+          m = re.search(r'OVERLAY_ICON_BASE64\s*=\s*"([^"]+)"', src)
+          if not m:
+              raise SystemExit('overlay icon base64 not found')
+          out = Path('memory-v2/app/src/main/res/drawable/ic_overlay_bridge.png')
+          out.write_bytes(base64.b64decode(m.group(1)))
+          print(out, out.stat().st_size)
+          PY
       - name: Build APK
         working-directory: memory-v2
         run: gradle :app:assembleDebug --stacktrace
