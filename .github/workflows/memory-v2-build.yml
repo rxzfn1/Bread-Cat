@@ -15,7 +15,9 @@ jobs:
         with:
           gradle-version: '8.9'
       - name: Generate memory 2.0 project
-        run: python3 memory-v2/generate_project.py
+        run: |
+          python3 memory-v2/generate_project.py
+          printf 'android.useAndroidX=true\n' > memory-v2/gradle.properties
       - name: Reuse confirmed transparent floating icon
         run: |
           python3 - <<'PY'
