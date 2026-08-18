@@ -1,4 +1,4 @@
-name: Build memory 2.0 APK
+name: Build memory 2.1 APK
 on:
   pull_request:
     branches: [main]
@@ -14,10 +14,12 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
-      - name: Generate memory 2.0 project
+      - name: Generate memory project
         run: |
           python3 memory-v2/generate_project.py
           printf 'android.useAndroidX=true\n' > memory-v2/gradle.properties
+      - name: Apply memory 2.1 fixes
+        run: python3 memory-v2/patch_v21.py
       - name: Reuse confirmed transparent floating icon
         run: |
           python3 - <<'PY'
@@ -35,9 +37,9 @@ jobs:
         working-directory: memory-v2
         run: gradle :app:assembleDebug --stacktrace
       - name: Rename APK
-        run: cp memory-v2/app/build/outputs/apk/debug/app-debug.apk memory-v2.0-no-accessibility.apk
+        run: cp memory-v2/app/build/outputs/apk/debug/app-debug.apk memory-v2.1.apk
       - uses: actions/upload-artifact@v4
         with:
-          name: memory-v2.0-no-accessibility
-          path: memory-v2.0-no-accessibility.apk
+          name: memory-v2.1
+          path: memory-v2.1.apk
           if-no-files-found: error
