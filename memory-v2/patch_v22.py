@@ -39,10 +39,9 @@ s, n = pattern.subn(replacement, s, count=1)
 if n != 1:
     raise SystemExit('main API UI block not found')
 
-s = s.replace('Button start = button("3. 启动悬浮识词");', 'Button start = button("3. 启动悬浮识词");')
 s = s.replace('        getPreferencesStore().edit().putString("maimemo_token", tokenInput.getText().toString().trim()).apply();\n', '')
 
-# Replace guide with no-API flow.
+# Replace guide with no-API flow. Use a callable so re.sub does not turn Java \n escapes into real newlines.
 guide_pattern = re.compile(r'''        TextView guide = text\(\n.*?                14, Color\.rgb\(83, 83, 90\)\);''', re.S)
 guide_replacement = '''        TextView guide = text(
                 "使用方式\\n\\n" +
@@ -50,7 +49,7 @@ guide_replacement = '''        TextView guide = text(
                 "如果你的墨墨版本没有对第三方开放搜索 Intent，memory 会自动打开墨墨，同时单词已经在剪贴板中；这时只需在墨墨搜索框粘贴即可。\\n\\n" +
                 "本版本不调用任何墨墨 API，不需要 Token，也不使用无障碍权限。",
                 14, Color.rgb(83, 83, 90));'''
-s, n = guide_pattern.subn(guide_replacement, s, count=1)
+s, n = guide_pattern.subn(lambda _m: guide_replacement, s, count=1)
 if n != 1:
     raise SystemExit('main guide block not found')
 
@@ -145,9 +144,6 @@ search_method = r'''    private void openMaimemoSearch(String word) {
 
 '''
 s = s.replace(insert_marker, search_method + insert_marker, 1)
-
-# We no longer enter the old fallback-return state from OCR.
-s = s.replace('toast("memory 已启动。现在可以回到不背单词使用悬浮图标");', 'toast("memory 已启动。回到不背单词后点悬浮图标即可识词并打开墨墨搜索");')
 svc.write_text(s, encoding='utf-8')
 
 print('memory 2.2 no-API search-intent patch applied')
