@@ -1,4 +1,4 @@
-name: Build memory 2.1 APK
+name: Build memory 2.2 APK
 on:
   pull_request:
     branches: [main]
@@ -18,8 +18,8 @@ jobs:
         run: |
           python3 memory-v2/generate_project.py
           printf 'android.useAndroidX=true\n' > memory-v2/gradle.properties
-      - name: Apply memory 2.1 fixes
-        run: python3 memory-v2/patch_v21.py
+      - name: Apply memory 2.2 no-API search patch
+        run: python3 memory-v2/patch_v22.py
       - name: Reuse confirmed transparent floating icon
         run: |
           python3 - <<'PY'
@@ -37,9 +37,9 @@ jobs:
         working-directory: memory-v2
         run: gradle :app:assembleDebug --stacktrace
       - name: Rename APK
-        run: cp memory-v2/app/build/outputs/apk/debug/app-debug.apk memory-v2.1.apk
+        run: cp memory-v2/app/build/outputs/apk/debug/app-debug.apk memory-v2.2-no-api-search.apk
       - uses: actions/upload-artifact@v4
         with:
-          name: memory-v2.1
-          path: memory-v2.1.apk
+          name: memory-v2.2-no-api-search
+          path: memory-v2.2-no-api-search.apk
           if-no-files-found: error
